@@ -62,13 +62,13 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="groupId" class="form-label">Group</label>
-                                        <select name="groupId" id="groupId">
+                                        <select name="groupId" id="groupId" class="form-select">
                                             <option value="">Select Group</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="ParentId" class="form-label">Parents</label>
-                                        <select name="ParentId" id="ParentId">
+                                        <select name="ParentId" id="ParentId" class="form-select">
                                             <option value="">Select Parent</option>
                                         </select>
                                     </div>
@@ -109,6 +109,7 @@
 
         </div>
     </div>
+
     <script>
         $(document).ready(function () {
             $('#companyName').on('change', function () {
@@ -167,10 +168,10 @@
             }
 
 
-            let table = $('#userTable').DataTable({
+            let table = $('#menuTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '/users/list',
+                ajax: '/menus/list',
                 columns: [
                     { data: 'company_name' },
                     { data: 'branch_name'},
@@ -201,12 +202,12 @@
                 $('#userName').val('');
                 $('#password').val('');
                 $('#userEmail').val('');
-                $('#userModal').modal('show');
+                $('#menuModal').modal('show');
             });
 
-            $('#userTable').on('click', '.edit', function () {
+            $('#menuTable').on('click', '.edit', function () {
                 let id = $(this).data('id');
-                $.get(`/users/edit/${id}`, function (data) {
+                $.get(`/menus/edit/${id}`, function (data) {
                     $('#id').val(data.id);
                     $('#userName').val(data.name);
                     $('#userEmail').val(data.email);
@@ -217,7 +218,7 @@
                     loadBranches(data.company_id, data.branch_id);
                     loadRoles(data.company_id, data.branch_id, data.role_id);
 
-                    $('#userModal').modal('show');
+                    $('#menuModal').modal('show');
                 });
             });
 
@@ -233,11 +234,11 @@
                     _token: $('input[name="_token"]').val()
                 };
                 $.ajax({
-                    url: '/users/store',
+                    url: '/menus/store',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
-                        $('#userModal').modal('hide');
+                        $('#menuModal').modal('hide');
                         table.ajax.reload();
                     },
                     error: function(xhr) {
@@ -246,11 +247,11 @@
                 });
             });
 
-            $('#userTable').on('click', '.delete', function () {
+            $('#menuTable').on('click', '.delete', function () {
                 if (confirm("Are you sure?")) {
                     let id = $(this).data('id');
                     $.ajax({
-                        url: `/users/delete/${id}`,
+                        url: `/menus/delete/${id}`,
                         type: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}'
